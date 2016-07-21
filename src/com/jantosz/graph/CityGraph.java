@@ -69,8 +69,9 @@ public class CityGraph
 		System.out.println("Opole neighbors: " + graph.getNeighbors(opole));
 		System.out.println("Namysłów neighbors: " + graph.getNeighbors(namyslow));
 
-		System.out.println("path Opole -> Wrocław: " + graph.findPath(opole, wroclaw));
-		System.out.println("path Wrocław -> Żmigród: " + graph.findPath(wroclaw, zmigrod));
+		System.out.println("path Opole -> Wrocław: " + graph.findPathDfs(opole, wroclaw));
+		System.out.println("path Wrocław -> Żmigród: " + graph.findPathDfs(wroclaw, zmigrod));
+		System.out.println("path Żmigród -> Brzeg: " + graph.findPathDfs(zmigrod, brzeg));
 	}
 
 	public Set<City> getNeighbors(City city){
@@ -83,7 +84,7 @@ public class CityGraph
 	}
 
 	//dsf algorithm
-	public List<City> findPath(City from, City to){
+	public List<City> findPathDfs(City from, City to){
 
 		Stack<City> cityStack = new Stack<>();
 		List<City> visited = new ArrayList<>();
