@@ -70,6 +70,7 @@ public class CityGraph
 		System.out.println("Namysłów neighbors: " + graph.getNeighbors(namyslow));
 
 		System.out.println("path Opole -> Wrocław: " + graph.findPath(opole, wroclaw));
+		System.out.println("path Wrocław -> Żmigród: " + graph.findPath(wroclaw, zmigrod));
 	}
 
 	public Set<City> getNeighbors(City city){
@@ -81,9 +82,48 @@ public class CityGraph
 		}
 	}
 
+	//dsf algorithm
 	public List<City> findPath(City from, City to){
 
-		//TODO
+		Stack<City> cityStack = new Stack<>();
+		List<City> visited = new ArrayList<>();
+		cityStack.push(from);
+		visited.add(from);
+
+		while(!cityStack.isEmpty()){
+			City city = cityStack.peek();
+
+			if(city.equals(to)){
+				//found!!!
+				return new ArrayList<>(cityStack);
+			}
+
+			//get unvisited child and push to stack
+			//if not found unvisited child then pop from stack
+
+			City unvisitedChild = getUnvisitedChild(visited, city);
+
+			if(unvisitedChild != null){
+				cityStack.push(unvisitedChild);
+				visited.add(unvisitedChild);
+			}else{
+				cityStack.pop();
+			}
+		}
+
 		return Collections.emptyList();
+	}
+
+	private City getUnvisitedChild(List<City> visited, City city)
+	{
+		City unvisitedChild = null;
+
+		for(City childCity: getNeighbors(city)){
+			if(!visited.contains(childCity)){
+				unvisitedChild = childCity;
+				break;
+			}
+		}
+		return unvisitedChild;
 	}
 }
