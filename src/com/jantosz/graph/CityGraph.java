@@ -72,6 +72,12 @@ public class CityGraph
 		System.out.println("path Opole -> Wrocław: " + graph.findPathDfs(opole, wroclaw));
 		System.out.println("path Wrocław -> Żmigród: " + graph.findPathDfs(wroclaw, zmigrod));
 		System.out.println("path Żmigród -> Brzeg: " + graph.findPathDfs(zmigrod, brzeg));
+
+		System.out.println("\n\n---------------------\n\n");
+
+		System.out.println("path Opole -> Wrocław: " + graph.findPathBfs(opole, wroclaw));
+		System.out.println("path Wrocław -> Żmigród: " + graph.findPathBfs(wroclaw, zmigrod));
+		System.out.println("path Żmigród -> Brzeg: " + graph.findPathBfs(zmigrod, brzeg));
 	}
 
 	public Set<City> getNeighbors(City city){
@@ -115,6 +121,37 @@ public class CityGraph
 		return Collections.emptyList();
 	}
 
+	//bsf algorithm
+	public List<City> findPathBfs(City from, City to){
+
+		Queue<City> cityQueue = new LinkedList<>();
+		List<City> visited = new ArrayList<>();
+		cityQueue.add(from);
+		visited.add(from);
+
+		List<City> citiesOnPath = new LinkedList<>();
+
+		while(!cityQueue.isEmpty()){
+			City city = cityQueue.poll();
+
+			if(city.equals(to)){
+				//found!!!
+				citiesOnPath.add(city);
+				return citiesOnPath;
+			}
+
+			List<City> childCities = getAllUnvisitedChild(visited, city);
+			if(childCities.size() >0){
+				citiesOnPath.add(city);
+			}
+
+			cityQueue.addAll(childCities);
+			visited.addAll(childCities);
+		}
+
+		return Collections.emptyList();
+	}
+
 	private City getUnvisitedChild(List<City> visited, City city)
 	{
 		City unvisitedChild = null;
@@ -126,5 +163,17 @@ public class CityGraph
 			}
 		}
 		return unvisitedChild;
+	}
+
+	List<City> getAllUnvisitedChild(List<City> visited, City city){
+		List<City> result = new ArrayList<>();
+		City unvisitedChild = null;
+
+		while((unvisitedChild = getUnvisitedChild(visited, city)) != null){
+			result.add(unvisitedChild);
+			visited.add(unvisitedChild);
+		}
+
+		return result;
 	}
 }
